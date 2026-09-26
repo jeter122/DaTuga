@@ -18,13 +18,13 @@
 # Usage:
 #   scripts/make-ipa.sh [--output PATH] [--configuration Release|Debug] [--keep-build]
 #
-# Default output: Madeira-unsigned.ipa in the repo root.
+# Default output: DaTuga-unsigned.ipa in the repo root.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-OUTPUT="$ROOT/Madeira-unsigned.ipa"
+OUTPUT="$ROOT/DaTuga-unsigned.ipa"
 CONFIGURATION="Release"
 KEEP_BUILD=0
 

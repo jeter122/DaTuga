@@ -866,18 +866,60 @@ static void *wine_process_thread(void *arg) {
 
             [fm createDirectoryAtPath:sys32Dir withIntermediateDirectories:YES attributes:nil error:nil];
 
+            // ml814: Da Tuga DLL swapper. Documents/madeira-dlls.txt is the
+            // engine contract (one "dllname=version" per line, "#" comments);
+            // a selected version resolves to
+            // GraphicsDLLs/<dll>/<version>/[<arch-subdir>/]<dll> in the bundle
+            // and wins over the built-in copy in the loop below.
+            NSMutableDictionary *dllOverrides = [NSMutableDictionary dictionary];
+            {
+                NSArray *docDirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                if ([docDirs count] > 0) {
+                    NSString *contract = [[docDirs objectAtIndex:0] stringByAppendingPathComponent:@"madeira-dlls.txt"];
+                    NSString *body = [NSString stringWithContentsOfFile:contract encoding:NSUTF8StringEncoding error:nil];
+                    for (NSString *line in [body componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]]) {
+                        NSString *t = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                        if ([t length] == 0 || [t hasPrefix:@"#"]) continue;
+                        NSRange eq = [t rangeOfString:@"="];
+                        if (eq.location == NSNotFound) continue;
+                        NSString *dllName = [[t substringToIndex:eq.location] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                        NSString *version = [[t substringFromIndex:eq.location + 1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                        if ([dllName length] == 0 || [version length] == 0) continue;
+                        NSString *verDir = [[[bundlePath stringByAppendingPathComponent:@"GraphicsDLLs"]
+                                             stringByAppendingPathComponent:dllName]
+                                            stringByAppendingPathComponent:version];
+                        NSString *archCandidate = [[verDir stringByAppendingPathComponent:[NSString stringWithUTF8String:bundle_subdir]]
+                                                    stringByAppendingPathComponent:dllName];
+                        NSString *flatCandidate = [verDir stringByAppendingPathComponent:dllName];
+                        NSString *resolved = nil;
+                        if ([fm fileExistsAtPath:archCandidate]) resolved = archCandidate;
+                        else if ([fm fileExistsAtPath:flatCandidate]) resolved = flatCandidate;
+                        if (resolved) {
+                            [dllOverrides setObject:resolved forKey:dllName];
+                            dprintf(STDERR_FILENO, "[WineProc] DLL swap: %s -> %s\n",
+                                    [dllName UTF8String], [resolved UTF8String]);
+                        } else {
+                            dprintf(STDERR_FILENO, "[WineProc] DLL swap: %s version '%s' not found, using built-in\n",
+                                    [dllName UTF8String], [version UTF8String]);
+                        }
+                    }
+                }
+            }
+
             NSArray *dlls = [fm contentsOfDirectoryAtPath:dllSource error:nil];
-            int linked = 0;
+            int linked = 0, swapped = 0;
             for (NSString *dll in dlls) {
-                NSString *src = [dllSource stringByAppendingPathComponent:dll];
+                NSString *dllOverride = [dllOverrides objectForKey:dll];
+                NSString *src = dllOverride ? dllOverride : [dllSource stringByAppendingPathComponent:dll];
+                if (dllOverride) swapped++;
                 NSString *dst = [sys32Dir stringByAppendingPathComponent:dll];
                 // Remove stale symlinks and re-create (bundle path changes on reinstall)
                 [fm removeItemAtPath:dst error:nil];
                 if ([fm createSymbolicLinkAtPath:dst withDestinationPath:src error:nil])
                     linked++;
             }
-            LOG("Symlinked %d DLLs from %{public}s to %{public}s", linked, bundle_subdir, sys32Dir.UTF8String);
-            dprintf(STDERR_FILENO, "[WineProc] Symlinked %d DLLs from %s -> sys32\n", linked, bundle_subdir);
+            LOG("Symlinked %d DLLs from %{public}s to %{public}s (%d swapped)", linked, bundle_subdir, sys32Dir.UTF8String, swapped);
+            dprintf(STDERR_FILENO, "[WineProc] Symlinked %d DLLs from %s -> sys32 (%d swapped)\n", linked, bundle_subdir, swapped);
 
             // X3 mixed-mode: also link NON-COLLIDING files from the other
             // bundle arch so cross-arch child exes resolve by Win32 path

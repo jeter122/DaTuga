@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		A1000001 /* MadeiraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001 /* MadeiraApp.swift */; };
+		A10000B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000B0 /* Assets.xcassets */; };
+		A10000B1 /* DLLSwapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000B1 /* DLLSwapper.swift */; };
+		A10000B2 /* DLLSwapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000B2 /* DLLSwapperView.swift */; };
 		A1000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000002 /* ContentView.swift */; };
 		A1000003 /* LogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000003 /* LogStore.swift */; };
 		A1000004 /* JITAllocator.c in Sources */ = {isa = PBXBuildFile; fileRef = A2000004 /* JITAllocator.c */; };
@@ -70,6 +73,9 @@
 
 /* Begin PBXFileReference section */
 		A2000001 /* MadeiraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MadeiraApp.swift; sourceTree = "<group>"; };
+		A20000B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000B1 /* DLLSwapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DLLSwapper.swift; sourceTree = "<group>"; };
+		A20000B2 /* DLLSwapperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DLLSwapperView.swift; sourceTree = "<group>"; };
 		A2000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A2000003 /* LogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogStore.swift; sourceTree = "<group>"; };
 		A2000004 /* JITAllocator.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = JITAllocator.c; sourceTree = "<group>"; };
@@ -235,6 +241,9 @@
 				A2000006 /* Madeira-Bridging-Header.h */,
 				A2000007 /* Madeira.entitlements */,
 				A2000008 /* Info.plist */,
+				A20000B0 /* Assets.xcassets */,
+				A20000B1 /* DLLSwapper.swift */,
+				A20000B2 /* DLLSwapperView.swift */,
 			);
 			path = Madeira;
 			sourceTree = "<group>";
@@ -343,6 +352,7 @@
 				A1000082 /* x86_64-directx in Resources */,
 				A1000040 /* prefix-template.tar.gz in Resources */,
 				A1000094 /* cacert.pem in Resources */,
+				A10000B0 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,6 +391,8 @@
 				A10000A7 /* SettingsView.swift in Sources */,
 				A10000A9 /* VirtualPadView.swift in Sources */,
 				A10000A8 /* VirtualPad.swift in Sources */,
+				A10000B1 /* DLLSwapper.swift in Sources */,
+				A10000B2 /* DLLSwapperView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,7 +500,7 @@
 					"$(SRCROOT)/Madeira",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.madeira.emulator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.datuga.emulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -539,7 +551,7 @@
 					"$(SRCROOT)/Madeira",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.madeira.emulator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.datuga.emulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

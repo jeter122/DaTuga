@@ -12,7 +12,7 @@ name: Build IPA (main, unsigned + release)
 #      push or a manual run -- never from a pull request, whose artifacts are
 #      for validation, not distribution.
 #
-# The artifact is still uploaded by `ipa.yml` itself (`Madeira-unsigned-ipa`),
+# The artifact is still uploaded by `ipa.yml` itself (`DaTuga-unsigned-ipa`),
 # so a PR run is downloadable from its Actions page; the release job below just
 # re-publishes it with a stable tag.
 #
@@ -67,7 +67,7 @@ jobs:
       - name: Download IPA
         uses: actions/download-artifact@v5
         with:
-          name: Madeira-unsigned-ipa
+          name: DaTuga-unsigned-ipa
 
       - name: Publish release
         env:
@@ -90,7 +90,7 @@ jobs:
           10 or 11 title calls. Those Microsoft binaries are redistributed under their
           own terms, recorded in the app's third-party notices.
           EOF
-          gh release create "$tag" Madeira-unsigned.ipa \
+          gh release create "$tag" DaTuga-unsigned.ipa \
             --repo "$GITHUB_REPOSITORY" \
             --title "Madeira unsigned IPA — ${sha}" \
             --notes-file release-notes.md

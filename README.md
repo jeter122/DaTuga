@@ -1,11 +1,20 @@
-# Madeira
+# Da Tuga
 
-Run Windows PC games on a non-jailbroken iPhone.
+Run Windows PC games on a non-jailbroken iPhone/iPad.
 
-Madeira combines [Wine](https://www.winehq.org/) (ARM64EC),
+Da Tuga is a fork of [Madeira](https://github.com/nwaf92641/Madeira) (GPL-3.0),
+rebadged for Portugal — same engine underneath: [Wine](https://www.winehq.org/) (ARM64EC),
 [FEX-Emu](https://github.com/FEX-Emu/FEX) for x86-64 → ARM64 translation, and
 [DXMT](https://github.com/3Shain/DXMT) for D3D11 → Metal, running as a single
 Mach process on iOS with wineserver as a thread rather than a separate process.
+
+New in this fork: a DLSS-Swapper-style **DLL Swapper** in Settings → Graphics
+DLLs, to pick which build provides each graphics DLL (`d3d11.dll`, `dxgi.dll`,
+`d3d10core.dll`, `d3d9.dll`, `d3d12.dll`, `winemetal.dll`). Selections are
+written to `Documents/madeira-dlls.txt` and apply on the next launch.
+
+All credit for the emulation stack goes to the Madeira project and its
+upstream components (Wine, FEX-Emu, DXMT). See `LICENSE` and `legal/`.
 
 ## Status
 

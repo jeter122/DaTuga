@@ -8,6 +8,7 @@ import SwiftUI
 /// and nothing here duplicates parsing rules that already have tests.
 struct SettingsView: View {
     @ObservedObject private var store = SettingsStore.shared
+    @ObservedObject private var dllStore = DLLSwapperStore.shared
     @Environment(\.dismiss) private var dismiss
 
     @State private var customWidth = ""
@@ -18,6 +19,7 @@ struct SettingsView: View {
             Form {
                 displaySection
                 graphicsSection
+                dllSwapperSection
                 controlsSection
                 performanceSection
                 compatibilitySection
@@ -208,6 +210,34 @@ struct SettingsView: View {
         } footer: {
             Text(graphicsFooter)
         }
+    }
+
+    // MARK: - DLL Swapper
+
+    /// DLSS-Swapper-style graphics DLL picker (ml814). The view owns the
+    /// selection; the engine contract is Documents/madeira-dlls.txt.
+    private var dllSwapperSection: some View {
+        Section {
+            NavigationLink {
+                DLLSwapperView()
+            } label: {
+                HStack {
+                    Text("DLL Swapper")
+                    Spacer()
+                    Text("\(swappedDLLCount) swapped")
+                        .foregroundColor(.secondary)
+                }
+            }
+        } header: {
+            Text("Graphics DLLs")
+        } footer: {
+            Text("Pick which build provides each graphics DLL, like DLSS Swapper. "
+                + "Applies on the next launch.")
+        }
+    }
+
+    private var swappedDLLCount: Int {
+        dllStore.selections.count
     }
 
     // MARK: - Controls
